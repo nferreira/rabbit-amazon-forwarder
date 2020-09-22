@@ -3,15 +3,15 @@
     "source" : {
       "type" : "RabbitMQ",
       "name" : "test-rabbit",
-      "connection" : "amqp://guest:guest@localhost:5672/",
+      "connection" : "amqp://guest:guest@rabbitmq:5672/",
       "topic" : "amq.topic",
       "queue" : "test-queue",
       "routingKeys" : ["#"]
     },
     "destination" : {
       "type" : "SNS",
-      "name" : "test-sns",
-      "target" : "arn:aws:sns:eu-west-1:XXXXXXXX:test-forwarder"
+      "name" : "my-topic",
+      "target" : "arn:aws:sns:us-east-1:164206198201:my-topic"
     }
   }
 ]

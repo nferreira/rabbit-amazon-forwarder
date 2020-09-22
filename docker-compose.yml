@@ -1,5 +1,13 @@
 version: '3.1'
 services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    networks:
+      - rabbitmq-net
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    
   rabbitamazonforwarder:
     image: airhelp/rabbit-amazon-forwarder
     ports:
@@ -7,11 +15,14 @@ services:
     volumes:
       - "${MAPPING_FILE}:/config/mapping.json"
       - "${CERTS_DIR:-./certs}:/certs"
+    networks:
+      - rabbitmq-net
     environment:
       MAPPING_FILE: /config/mapping.json
       AWS_REGION: ${AWS_REGION}
       AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_SESSION_TOKEN: ${AWS_SESSION_TOKEN}
       CA_CERT_FILE: ${CA_CERT_FILE:- }
       CERT_FILE: ${CERT_FILE:- }
       KEY_FILE: ${KEY_FILE:- }
@@ -33,3 +44,6 @@ services:
       context: .
       dockerfile: Dockerfile-test
     command: gofmt ./...
+
+networks:
+  rabbitmq-net: 
